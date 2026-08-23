@@ -9,7 +9,7 @@ const INVITATION = {
   venue: 'Narangba, Queensland',
   eventDate: '2026-09-07T10:00:00+10:00',
   mapUrl: 'https://maps.app.goo.gl/mRTXcrErRen6Aj9a9',
-  musicUrl: '', // Add an uploaded audio file path here, for example: '/music/song.mp3'
+  musicUrl: '/music/indian-energetic.mp3', // Replace this path to swap the editable background track.
   message: 'A house is built with walls and beams; a home is made with love and dreams. With grateful hearts, we invite you to step through our new doors, share in our happiness, and bless the place where our family’s next chapter will unfold.',
 };
 
