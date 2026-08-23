@@ -2,6 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || '';
+const asset = (path: string) => `${BASE_PATH}${path}`;
+
 const INVITATION = {
   hosts: 'Sankar & Karthiha',
   dateLabel: '07 September 2026',
@@ -9,15 +12,15 @@ const INVITATION = {
   venue: 'Narangba, Queensland',
   eventDate: '2026-09-07T10:00:00+10:00',
   mapUrl: 'https://maps.app.goo.gl/mRTXcrErRen6Aj9a9',
-  musicUrl: '/music/indian-energetic.mp3', // Replace this path to swap the editable background track.
+  musicUrl: asset('/music/indian-energetic.mp3'), // Replace this path to swap the editable background track.
   message: 'A house is built with walls and beams; a home is made with love and dreams. With grateful hearts, we invite you to step through our new doors, share in our happiness, and bless the place where our family’s next chapter will unfold.',
 };
 
 const GALLERY = [
-  { src: '/photos/foundation.jpg', alt: 'Our family at the cleared site of our future home', date: '28 March 2026', note: 'The first footprint', copy: 'On bare earth, we pictured every room, every laugh, and every memory still to come.' },
-  { src: '/photos/progress-one.jpg', alt: 'Our family watching the slab and foundations take shape', date: '04 April 2026', note: 'Foundations laid', copy: 'Lines appeared in the earth. The dream finally had a shape we could stand beside.' },
-  { src: '/photos/progress-two.jpg', alt: 'A joyful family moment as construction progressed', date: '04 April 2026', note: 'Growing together', copy: 'Every visit became a family ritual—measuring progress in smiles, stories, and excited little footsteps.' },
-  { src: '/photos/framing.jpg', alt: 'Our family in front of the completed steel frame', date: '11 April 2026', note: 'The frame rises', copy: 'Then the outline rose against the blue sky, and our future home suddenly felt wonderfully real.' },
+  { src: asset('/photos/foundation.jpg'), alt: 'Our family at the cleared site of our future home', date: '28 March 2026', note: 'The first footprint', copy: 'On bare earth, we pictured every room, every laugh, and every memory still to come.' },
+  { src: asset('/photos/progress-one.jpg'), alt: 'Our family watching the slab and foundations take shape', date: '04 April 2026', note: 'Foundations laid', copy: 'Lines appeared in the earth. The dream finally had a shape we could stand beside.' },
+  { src: asset('/photos/progress-two.jpg'), alt: 'A joyful family moment as construction progressed', date: '04 April 2026', note: 'Growing together', copy: 'Every visit became a family ritual—measuring progress in smiles, stories, and excited little footsteps.' },
+  { src: asset('/photos/framing.jpg'), alt: 'Our family in front of the completed steel frame', date: '11 April 2026', note: 'The frame rises', copy: 'Then the outline rose against the blue sky, and our future home suddenly felt wonderfully real.' },
 ];
 
 function Countdown() {
@@ -92,14 +95,14 @@ export default function Home() {
     <audio ref={audioRef} src={INVITATION.musicUrl || undefined} loop preload="none" />
     <button className={`music-control ${music ? 'playing' : ''}`} onClick={() => void toggleMusic()} aria-label={music ? 'Pause background music' : 'Play background music'}><span>{music ? 'Ⅱ' : '♪'}</span><em>{music ? 'Music on' : 'Music'}</em></button>
     <Petals active={petals} /><div className="cinematic-burst" aria-hidden="true"><i/><i/><i/></div>
-    <section className="hero" id="top"><div className="hero-image"/><div className="hero-shade"/><div className="hero-content reveal in-view"><p className="eyebrow">Where our dream began</p><h1>From earth<br/><i>to</i> home</h1><p className="hero-kicker">Scroll through the journey that brought us home</p></div><a className="scroll-cue" href="#invitation"><span>Begin the journey</span><i /></a></section>
+    <section className="hero" id="top"><div className="hero-image" style={{ backgroundImage: `url(${asset('/photos/foundation.jpg')})` }}/><div className="hero-shade"/><div className="hero-content reveal in-view"><p className="eyebrow">Where our dream began</p><h1>From earth<br/><i>to</i> home</h1><p className="hero-kicker">Scroll through the journey that brought us home</p></div><a className="scroll-cue" href="#invitation"><span>Begin the journey</span><i /></a></section>
     <section className="letter-section" id="invitation"><div className="ornament">✦</div><div className="letter reveal"><p className="section-label">With love & gratitude</p><h2>Come, bless<br/>our new beginning.</h2><p>{INVITATION.message}</p><div className="signature">Sankar <span>&</span> Karthiha</div></div></section>
     <section className="scratch-section"><div className="section-heading reveal"><p className="section-label">Save the date</p><h2>A little surprise<br/>awaits you</h2><p className="instruction">Gently rub the golden card with your finger.</p></div><ScratchCard onReveal={celebrate}/></section>
-    <section className="count-section"><div className="reveal"><p className="section-label">Counting every heartbeat</p><h2>Until we open<br/>our doors to you</h2><Countdown/></div></section>
+    <section className="count-section" style={{ backgroundImage: `linear-gradient(rgba(32,10,12,.84),rgba(32,10,12,.9)),url(${asset('/photos/framing.jpg')})` }}><div className="reveal"><p className="section-label">Counting every heartbeat</p><h2>Until we open<br/>our doors to you</h2><Countdown/></div></section>
     <section className="gallery-section" id="journey"><div className="section-heading reveal"><p className="section-label">Our journey home</p><h2>Watch the dream<br/>rise as you scroll</h2><p className="journey-intro">From the first patch of earth to the frame that held our hopes.</p></div><div className="journey-line" aria-hidden="true"><span /></div><div className="gallery">{GALLERY.map((image, index) => <article className={`gallery-card reveal card-${index + 1}`} key={image.src}><div className="journey-photo"><img src={image.src} alt={image.alt} loading={index < 2 ? 'eager' : 'lazy'}/><span className="journey-number">0{index + 1}</span></div><div className="journey-copy"><p>{image.date}</p><h3>{image.note}</h3><span>{image.copy}</span></div></article>)}</div></section>
-    <section className="home-section"><div className="completion-label reveal"><span>05</span><p>And then, we were home.</p></div><div className="home-photo"><img src="/photos/home.jpg" alt="The finished home of Sankar and Karthiha in Narangba" loading="eager"/></div><div className="home-card reveal"><p className="section-label">The journey ends at our door</p><h2>Our new home</h2><div className="venue-line"><span>Date</span><strong>{INVITATION.dateLabel}</strong></div><div className="venue-line"><span>Time</span><strong>{INVITATION.time}</strong></div><div className="venue-line"><span>Place</span><strong>{INVITATION.venue}</strong></div><a className="map-button" href={INVITATION.mapUrl} target="_blank" rel="noreferrer"><span>Open in Google Maps</span><i>↗</i></a></div></section>
+    <section className="home-section"><div className="completion-label reveal"><span>05</span><p>And then, we were home.</p></div><div className="home-photo"><img src={asset('/photos/home.jpg')} alt="The finished home of Sankar and Karthiha in Narangba" loading="eager"/></div><div className="home-card reveal"><p className="section-label">The journey ends at our door</p><h2>Our new home</h2><div className="venue-line"><span>Date</span><strong>{INVITATION.dateLabel}</strong></div><div className="venue-line"><span>Time</span><strong>{INVITATION.time}</strong></div><div className="venue-line"><span>Place</span><strong>{INVITATION.venue}</strong></div><a className="map-button" href={INVITATION.mapUrl} target="_blank" rel="noreferrer"><span>Open in Google Maps</span><i>↗</i></a></div></section>
     <footer><p className="section-label">We cannot wait to welcome you</p><div className="footer-names">Sankar <i>&</i> Karthiha</div><p>07 · 09 · 2026</p><a href="#top">Back to top ↑</a></footer>
-    {!open && <button className="invitation-cover kinetic-cover" onClick={() => void handleOpen()} aria-label="Open Sankar and Karthiha's housewarming invitation">
+    {!open && <button className="invitation-cover kinetic-cover" style={{ backgroundImage: `url(${asset('/kinetic-kolam-cover.png')})` }} onClick={() => void handleOpen()} aria-label="Open Sankar and Karthiha's housewarming invitation">
       <span className="cover-edge"/><span className="energy-aura"/>
       <span className="spark-field" aria-hidden="true">{Array.from({ length: 42 }, (_, i) => <i key={i} style={{ '--s': i } as React.CSSProperties}/>)}</span>
       <span className="cover-accessible-copy">Bless our new beginning. Sankar and Karthiha housewarming invitation. Tap to open.</span>
