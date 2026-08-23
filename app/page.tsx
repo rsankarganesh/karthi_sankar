@@ -25,8 +25,8 @@ function Countdown() {
     const distance = Math.max(0, new Date(INVITATION.eventDate).getTime() - Date.now());
     return { days: Math.floor(distance / 86400000), hours: Math.floor(distance / 3600000) % 24, minutes: Math.floor(distance / 60000) % 60, seconds: Math.floor(distance / 1000) % 60 };
   }, []);
-  const [time, setTime] = useState(calculate);
-  useEffect(() => { const timer = window.setInterval(() => setTime(calculate()), 1000); return () => clearInterval(timer); }, [calculate]);
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  useEffect(() => { setTime(calculate()); const timer = window.setInterval(() => setTime(calculate()), 1000); return () => clearInterval(timer); }, [calculate]);
   return <div className="countdown" aria-label={`${time.days} days, ${time.hours} hours, ${time.minutes} minutes and ${time.seconds} seconds until the celebration`}>
     {Object.entries(time).map(([label, value]) => <div className="count-cell" key={label}><strong>{String(value).padStart(2, '0')}</strong><span>{label}</span></div>)}
   </div>;
