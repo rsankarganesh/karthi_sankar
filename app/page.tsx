@@ -80,16 +80,18 @@ export default function Home() {
     if (music) { audioRef.current?.pause(); if (ambientRef.current) { window.clearInterval(ambientRef.current.timer); void ambientRef.current.context.close(); ambientRef.current = null; } setMusic(false); return; }
     if (INVITATION.musicUrl && audioRef.current) { await audioRef.current.play(); setMusic(true); return; }
     const AudioCtor = window.AudioContext || (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const context = new AudioCtor(); const playChord = () => {
-      const now = context.currentTime; [261.63, 329.63, 392, 493.88].forEach((frequency, index) => { const osc = context.createOscillator(); const gain = context.createGain(); osc.type = 'sine'; osc.frequency.value = frequency / (index > 1 ? 2 : 1); gain.gain.setValueAtTime(.0001, now); gain.gain.exponentialRampToValueAtTime(.022, now + 1.4); gain.gain.exponentialRampToValueAtTime(.0001, now + 5.8); osc.connect(gain).connect(context.destination); osc.start(now + index * .18); osc.stop(now + 6); });
-    }; playChord(); const timer = window.setInterval(playChord, 6000); ambientRef.current = { context, timer }; setMusic(true);
+    const context = new AudioCtor(); let step = 0;
+    const hit = (frequency: number, duration: number, volume: number, type: OscillatorType = 'sine') => { const now = context.currentTime; const osc = context.createOscillator(); const gain = context.createGain(); osc.type = type; osc.frequency.setValueAtTime(frequency, now); if (frequency < 100) osc.frequency.exponentialRampToValueAtTime(38, now + duration); gain.gain.setValueAtTime(volume, now); gain.gain.exponentialRampToValueAtTime(.0001, now + duration); osc.connect(gain).connect(context.destination); osc.start(now); osc.stop(now + duration); };
+    const melody = [392, 440, 523.25, 587.33, 523.25, 440, 392, 659.25, 587.33, 523.25, 440, 392, 440, 523.25, 587.33, 783.99];
+    const pulse = () => { if (step % 4 === 0) hit(82, .22, .085); if (step % 4 === 2) hit(150, .08, .025, 'square'); if (step % 2 === 0 || step % 8 === 7) hit(1050 + (step % 3) * 180, .035, .012, 'triangle'); hit(melody[step % melody.length], .17, step % 2 ? .018 : .026, 'triangle'); if (step % 8 === 0) hit(196, .65, .018, 'sine'); step += 1; };
+    pulse(); const timer = window.setInterval(pulse, 288); ambientRef.current = { context, timer }; setMusic(true);
   };
-  const handleOpen = async () => { setOpen(true); window.setTimeout(() => void toggleMusic(), 650); };
+  const handleOpen = async () => { setOpen(true); setPetals(true); window.setTimeout(() => setPetals(false), 4600); window.setTimeout(() => void toggleMusic(), 280); };
   const celebrate = () => { if (petals) return; setPetals(true); window.setTimeout(() => setPetals(false), 4500); };
   return <main className={`site-shell ${open ? 'opened' : ''}`}>
     <audio ref={audioRef} src={INVITATION.musicUrl || undefined} loop preload="none" />
     <button className={`music-control ${music ? 'playing' : ''}`} onClick={() => void toggleMusic()} aria-label={music ? 'Pause background music' : 'Play background music'}><span>{music ? 'Ⅱ' : '♪'}</span><em>{music ? 'Music on' : 'Music'}</em></button>
-    <Petals active={petals} />
+    <Petals active={petals} /><div className="cinematic-burst" aria-hidden="true"><i/><i/><i/></div>
     <section className="hero" id="top"><div className="hero-image"/><div className="hero-shade"/><div className="hero-content reveal in-view"><p className="eyebrow">A new chapter begins</p><p className="monogram">S <span>&</span> K</p><h1>Sankar <i>&</i> Karthiha</h1><p className="hero-kicker">joyfully invite you to warm their new home</p><p className="hero-date">07 · 09 · 2026</p></div><a className="scroll-cue" href="#invitation"><span>Scroll</span><i /></a></section>
     <section className="letter-section" id="invitation"><div className="ornament">✦</div><div className="letter reveal"><p className="section-label">With love & gratitude</p><h2>Come, bless<br/>our new beginning.</h2><p>{INVITATION.message}</p><div className="signature">Sankar <span>&</span> Karthiha</div></div></section>
     <section className="scratch-section"><div className="section-heading reveal"><p className="section-label">Save the date</p><h2>A little surprise<br/>awaits you</h2><p className="instruction">Gently rub the golden card with your finger.</p></div><ScratchCard onReveal={celebrate}/></section>
