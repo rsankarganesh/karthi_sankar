@@ -38,3 +38,8 @@ footer{text-align:center;padding:90px 24px 55px;background:var(--wine-dark);colo
 .hero h1{margin-top:28px}.hero h1 i{display:inline-block;font-size:.38em;margin:.12em}.hero-kicker{margin-top:32px}.scroll-cue{white-space:nowrap}
 @keyframes coverGlow{50%{filter:saturate(1.35) brightness(1.08)}}
 @keyframes coverShine{0%,35%{transform:translateX(-85%)}70%,100%{transform:translateX(85%)}}
+
+/* Keep the chosen artwork true to its original tones; animation comes only from crisp points of light. */
+.kinetic-cover:before,.kinetic-cover:after,.kinetic-cover .energy-aura{display:none}
+.kinetic-cover .spark-field{opacity:.58;mix-blend-mode:screen}
+.kinetic-cover .spark-field i{width:2px;height:2px;box-shadow:0 0 6px 2px #ffd86c88}
