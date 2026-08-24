@@ -43,3 +43,5 @@ footer{text-align:center;padding:90px 24px 55px;background:var(--wine-dark);colo
 .kinetic-cover:before,.kinetic-cover:after,.kinetic-cover .energy-aura{display:none}
 .kinetic-cover .spark-field{opacity:.58;mix-blend-mode:screen}
 .kinetic-cover .spark-field i{width:2px;height:2px;box-shadow:0 0 6px 2px #ffd86c88}
+.invitation-cover{-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;opacity:1!important;filter:none!important;touch-action:manipulation}
+.invitation-cover:active,.invitation-cover:focus{opacity:1!important;filter:none!important;outline:none}
