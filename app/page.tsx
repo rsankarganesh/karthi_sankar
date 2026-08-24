@@ -18,9 +18,9 @@ const INVITATION = {
 
 const GALLERY = [
   { src: asset('/photos/foundation.jpg'), alt: 'Our family at the cleared site of our future home', date: '28 March 2026', note: 'The first footprint', copy: 'On bare earth, we pictured every room, every laugh, and every memory still to come.' },
-  { src: asset('/photos/progress-one.jpg'), alt: 'Our family watching the slab and foundations take shape', date: '04 April 2026', note: 'Foundations laid', copy: 'Lines appeared in the earth. The dream finally had a shape we could stand beside.' },
   { src: asset('/photos/progress-two.jpg'), alt: 'A joyful family moment as construction progressed', date: '04 April 2026', note: 'Growing together', copy: 'Every visit became a family ritual—measuring progress in smiles, stories, and excited little footsteps.' },
   { src: asset('/photos/framing.jpg'), alt: 'Our family in front of the completed steel frame', date: '11 April 2026', note: 'The frame rises', copy: 'Then the outline rose against the blue sky, and our future home suddenly felt wonderfully real.' },
+  { src: asset('/photos/roofing.jpg'), alt: 'Our new home with its roof installed during construction', date: '04 May 2026', note: 'Under one roof', copy: 'Walls wrapped the rooms and the roof reached across them—the place we imagined was becoming our home.' },
 ];
 
 function Countdown() {
@@ -79,6 +79,23 @@ export default function Home() {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('in-view')), { threshold: .14 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); return () => observer.disconnect();
   }, [open]);
+  useEffect(() => {
+    const syncPlayback = () => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (document.hidden) audio.pause();
+      else if (music && open) void audio.play().catch(() => undefined);
+    };
+    const pausePlayback = () => audioRef.current?.pause();
+    document.addEventListener('visibilitychange', syncPlayback);
+    window.addEventListener('pagehide', pausePlayback);
+    window.addEventListener('pageshow', syncPlayback);
+    return () => {
+      document.removeEventListener('visibilitychange', syncPlayback);
+      window.removeEventListener('pagehide', pausePlayback);
+      window.removeEventListener('pageshow', syncPlayback);
+    };
+  }, [music, open]);
   const toggleMusic = async () => {
     if (music) { audioRef.current?.pause(); if (ambientRef.current) { window.clearInterval(ambientRef.current.timer); void ambientRef.current.context.close(); ambientRef.current = null; } setMusic(false); return; }
     if (INVITATION.musicUrl && audioRef.current) { await audioRef.current.play(); setMusic(true); return; }
