@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 const siteUrl = process.env.SITE_URL ?? 'http://localhost:3000';
@@ -23,13 +23,25 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  colorScheme: 'light',
+  themeColor: '#f7ead4',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ colorScheme: 'light' }}>
+      <head>
+        <meta name="color-scheme" content="only light" />
+        <meta name="supported-color-schemes" content="light" />
+      </head>
       <body>{children}</body>
     </html>
   );

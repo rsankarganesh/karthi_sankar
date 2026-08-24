@@ -76,6 +76,17 @@ export default function Home() {
   const [open, setOpen] = useState(false); const [petals, setPetals] = useState(false); const [music, setMusic] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null); const ambientRef = useRef<{ context: AudioContext; timer: number } | null>(null);
   useEffect(() => {
+    const samsungInternet = /SamsungBrowser/i.test(navigator.userAgent);
+    const darkDevice = window.matchMedia('(prefers-color-scheme: dark)');
+    const syncBrowserTheme = () => {
+      document.documentElement.classList.toggle('samsung-internet', samsungInternet);
+      document.documentElement.classList.toggle('samsung-internet-dark', samsungInternet && darkDevice.matches);
+    };
+    syncBrowserTheme();
+    darkDevice.addEventListener?.('change', syncBrowserTheme);
+    return () => darkDevice.removeEventListener?.('change', syncBrowserTheme);
+  }, []);
+  useEffect(() => {
     const observer = new IntersectionObserver(entries => entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('in-view')), { threshold: .14 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el)); return () => observer.disconnect();
   }, [open]);

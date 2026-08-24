@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-:root{--ivory:#f4efe5;--paper:#ebe1d0;--gold:#c5a35f;--gold-light:#ead69f;--wine:#59181d;--wine-dark:#2b0d10;--ink:#24211d;--muted:#796f62}
+:root{color-scheme:only light;--ivory:#f4efe5;--paper:#ebe1d0;--gold:#c5a35f;--gold-light:#ead69f;--wine:#59181d;--wine-dark:#2b0d10;--ink:#24211d;--muted:#796f62}
 *{box-sizing:border-box}html{scroll-behavior:smooth;background:#15120f}body{margin:0;background:var(--ivory);color:var(--ink);font-family:Georgia,'Times New Roman',serif}button,a{font:inherit}.site-shell{overflow:hidden}.section-label,.eyebrow,.hero-kicker,.instruction,.venue-line span,.count-cell span,.gallery-card figcaption,.music-control,.scroll-cue,footer>a{font-family:Arial,Helvetica,sans-serif;text-transform:uppercase;letter-spacing:.23em;font-size:.63rem;font-weight:600}.reveal{opacity:0;transform:translateY(38px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}.reveal.in-view{opacity:1;transform:none}
 
 .hero{position:relative;min-height:100svh;display:grid;place-items:center;isolation:isolate;color:#fff}.hero-image{position:absolute;inset:0;z-index:-3;background:url('/photos/home.jpg') 57% center/cover no-repeat;transform:scale(1.025);animation:heroZoom 16s ease-out both}.hero-shade{position:absolute;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(10,8,6,.28),rgba(17,12,8,.36) 42%,rgba(18,13,9,.85))}.hero:after{content:'';position:absolute;inset:16px;border:1px solid rgba(234,214,159,.5);pointer-events:none}.hero-content{width:min(92%,760px);padding:90px 24px 120px;text-align:center;text-shadow:0 2px 24px #000}.eyebrow,.hero-kicker{margin:0;color:#f4ead3}.monogram{margin:22px 0 14px;letter-spacing:.25em;color:var(--gold-light)}.monogram span,h1 i{color:var(--gold);font-weight:400}.hero h1{margin:0;font-size:clamp(3.25rem,14.5vw,7.5rem);line-height:.86;font-weight:400;letter-spacing:-.045em}.hero h1 i{display:block;font-size:.42em;line-height:1;margin:.12em 0}.hero-kicker{max-width:420px;margin:28px auto 20px;line-height:1.8}.hero-date{margin:0;letter-spacing:.35em;color:var(--gold-light);font-size:.83rem}.scroll-cue{position:absolute;z-index:2;bottom:27px;left:50%;display:flex;align-items:center;gap:12px;transform:translateX(-50%);color:#fff;text-decoration:none}.scroll-cue i{position:relative;width:1px;height:32px;background:#ffffff55;overflow:hidden}.scroll-cue i:after{content:'';position:absolute;inset:0;background:#fff;animation:scrollLine 2s infinite}
@@ -45,3 +45,21 @@ footer{text-align:center;padding:90px 24px 55px;background:var(--wine-dark);colo
 .kinetic-cover .spark-field i{width:2px;height:2px;box-shadow:0 0 6px 2px #ffd86c88}
 .invitation-cover{-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;opacity:1!important;filter:none!important;touch-action:manipulation}
 .invitation-cover:active,.invitation-cover:focus{opacity:1!important;filter:none!important;outline:none}
+
+/* Keep the invitation faithful on mobile browsers that try to recolour light pages. */
+html,body,.site-shell,.invitation-cover{color-scheme:only light}
+body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+.invitation-cover{background-color:#f7ead4!important;background-blend-mode:normal!important}
+.music-control{top:max(18px,env(safe-area-inset-top));right:max(18px,env(safe-area-inset-right))}
+.hero,.invitation-cover{min-height:100vh;min-height:100svh}
+@media(prefers-color-scheme:dark){
+  html.samsung-internet-dark .invitation-cover{filter:brightness(1.34) saturate(1.08) contrast(.98)!important}
+  html.samsung-internet-dark .kinetic-cover .spark-field{opacity:.82}
+}
+@media(max-width:420px){
+  .cover-edge{inset:9px}
+  .music-control{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right))}
+  .gallery-card{padding-left:26px}
+  .journey-line{left:24px}
+}
+@supports not (height:100svh){.hero,.invitation-cover{min-height:100vh}}
